@@ -56,9 +56,28 @@ module.exports = {
    * `UsersController.update()`
    */
   update: function (req, res) {
-    return res.json({
-      todo: 'update() is not implemented yet!'
-    });
+
+    var values = req.allParams();
+    var modifiedEndpoint = endpoint + "/" + values.id;
+
+            if(req.method != "POST"){
+          return res.view('update');
+        }
+
+        var args = {
+            data: req.body,
+            headers: { "Content-Type": "application/json" }
+        };
+         
+        client.put(modifiedEndpoint, args, function (data, response) {
+            // return res.view('udpate', {success: { message: "Record added successfully"}});
+            if(response.statusCode != "200"){
+                return res.view('update', {error:{message: response.statusMessage + ": " + data.reason}});
+            }
+
+            return res.view('update', {success:{message: "Record updated successfully"}});
+
+        })
   },
 
 
@@ -66,9 +85,28 @@ module.exports = {
    * `UsersController.delete()`
    */
   delete: function (req, res) {
-    return res.json({
-      todo: 'delete() is not implemented yet!'
-    });
+
+    var values = req.allParams();
+    var modifiedEndpoint = endpoint + "/" + values.id;
+
+            if(req.method != "POST"){
+          return res.view('delete');
+        }
+
+        var args = {
+            data: req.body,
+            headers: { "Content-Type": "application/json" }
+        };
+         
+        client.delete(modifiedEndpoint, args, function (data, response) {
+            // return res.view('delete', {success: { message: "Record added successfully"}});
+            if(response.statusCode != "200"){
+                return res.view('delete', {error:{message: response.statusMessage + ": " + data.reason}});
+            }
+
+            return res.view('update', {success:{message: "Record delete successfully"}});
+
+        })
   }
 };
 
